@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="10" height="10" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="town01" tilewidth="32" tileheight="32">
+  <image source="../../town01.png" trans="ffffff" width="512" height="1440"/>
+ </tileset>
+ <layer name="Ground" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJwTZmBgEKYBhgFcfGQxbOoGg9hAYAAbjAVZ
+  </data>
+ </layer>
+ <layer name="Collision" width="10" height="10">
+  <properties>
+   <property name="collision" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYKA+mMfIwDAfimEAxl+AJLYOyBZkgGAYgPE3IKnbB2Tvh2IYgPEPIImdA7LPA/EFAmL3gOz7QPyAgNhAAABkChQF
+  </data>
+ </layer>
+ <layer name="Above" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAtmM8IwYSAMBQTAvsZIXi4AgDvDgLn
+  </data>
+ </layer>
+</map>
