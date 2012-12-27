@@ -1,0 +1,53 @@
+display
+    draws the scene
+    deals with screen clipping and only redrawing cells that need it
+
+scene
+    holds the grid of sprites for the entire world
+        filled in via the level
+
+    contains all the dynamic sprites (moving ones, animated ones, etc..)
+
+spritesheet
+    holds a copy of the sprite sheet imag
+    easily access specific cells
+
+sprite
+    location
+    collision flag
+    points to a specific cell in the sprite sheet
+        if it's dynamic, this can point to a different cell on the same sprite sheet
+    
+
+level
+    structure that stores the layout for static sprites to be placed in a scene
+    also any game/sprite logic
+    input comes in here, and is handled
+
+input
+    keyboard/mouse input manager
+
+
+
+
+layers of tilesheets
+
+
+-----------------
+api
+----------------
+display
+    setScene(scene)
+    stopUpdates()
+    startUpdates(fps)
+
+scene
+    free()
+    step(dt)
+    isDirty()
+spritesheet
+sprite
+level
+input
+
+            

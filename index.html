@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title></title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="js/ChangeableValue.js"></script>
+        <script src="js/Display.js"></script>
+        <script src="js/SpriteSheet.js"></script>
+
+        <script type="text/javascript">
+        var display, ss, sprite;
+        $(function(){
+            display = new Display(600,600);
+            $('#container').append(display.canvas);
+            display.setGridDimensions(10,10);
+
+
+            ss1 = new SpriteSheet("dirt",48);
+            ss1.onload = function(){
+                console.log("dirt.");
+                for(var r = 0 ; r < 10 ; r ++)
+                for(var c = 0 ; c < 10 ; c ++){
+                    var sprite1 = new Sprite(ss1,0,0);
+                    sprite1.position.set([r,c]);
+                    display.addSprite(sprite1);
+                }
+            };
+
+            ss = new SpriteSheet("betty",48);
+            ss.onload = function(){
+                sprite = new Sprite(ss,0,0);
+                display.addSprite(sprite);
+                sprite.position.set([0,0]);
+            };
+
+            $("body").keydown(function(key){
+                pos = sprite.position.get() // [row, col]
+                switch(key.which){
+                    case 38:
+                    case 87://up
+                        sprite.move(NORTH);
+                    break;
+                    case 40:
+                    case 83://down
+                        sprite.move(SOUTH);
+                    break;
+                    case 37:
+                    case 65://left
+                        sprite.move(WEST);
+                    break;
+                    case 39:
+                    case 68://right
+                        sprite.move(EAST);
+                    break;
+                }
+            });
+        });
+        </script>
+            
+        
+    </head>
+    <body>
+        <div id="container">
+        </div>
+    </body>
+</html>
+
