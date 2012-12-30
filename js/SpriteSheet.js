@@ -4,13 +4,22 @@ function SpriteSheet(name,spriteSize){
 
     this.size = spriteSize;
     var _this = this;
+    this.horizontalSprites = 0;
     this.image = $("<img/>").attr('src',this.path).load(function(){
         if((this.width % _this.size) + (this.height % _this.size) != 0){
             console.warn("Sprite sheet not multiple of sprite size.");
             console.warn("W:",this.width,"H:",this.height,"Size:",_this.size);
         }
+        _this.horizontalSprites = this.width / _this.size;
         _this.onload(this);
-    });
+    })[0];
+}
+
+SpriteSheet.prototype.getSprite = function(id){
+    id -=1;
+    var col = id % this.horizontalSprites;
+    var row = Math.floor(id/this.horizontalSprites);
+    return [this.image,col*this.size, row*this.size, this.size];
 }
 
 SpriteSheet.prototype.onload = function (img){
@@ -25,6 +34,7 @@ function Sprite(spriteSheet, row, col){
     this.sy  = col * spriteSheet.size
     this.img = spriteSheet.image;
     this.position = new ChangeableValue([0,0])
+    this.layer = 0;
     this.direction=SOUTH
 }
 Sprite.prototype.isDirty = function(){
@@ -34,10 +44,10 @@ Sprite.prototype.clean = function(){
     this.dirty = false;
 }
 Sprite.prototype.getImage = function(){
-    return [this.img[0],this.sx+this.size*this.direction,this.sy,this.size]
+    return [this.img,this.sx,this.sy+this.size*this.direction,this.size]
 }
 
-Sprite.prototype.move = function(direction){
+Sprite.prototype.move = function(direction,world){
     this.direction= direction
     var pos = this.position.get().concat()
     switch(direction){
@@ -46,7 +56,10 @@ Sprite.prototype.move = function(direction){
         case EAST:  pos[1]+=1; break;
         case WEST:  pos[1]-=1; break;
     }
-    this.position.set(pos);
+    if(!world.collisionAt(pos))
+        this.position.set(pos);
+    else
+        this.position.set(this.position.get())
 }
 
 function timestamp(){ return (new Date()).getTime()/1000.0; }

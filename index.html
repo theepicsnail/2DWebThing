@@ -1,17 +1,33 @@
 <html>
     <head>
         <title></title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="js/jquery.min.js"></script>
         <script src="js/ChangeableValue.js"></script>
         <script src="js/Display.js"></script>
+        <script src="js/Map.js"></script>
         <script src="js/SpriteSheet.js"></script>
-
         <script type="text/javascript">
-        var display, ss, sprite;
+        var display, ss, sprite, map;
         $(function(){
-            display = new Display(600,600);
+            display = new Display(320,320);
             $('#container').append(display.canvas);
-            display.setGridDimensions(10,10);
+//            map = new Map("LayerTest");
+            map = new Map("level2"); 
+            map.mapLoaded = function(map){ display.loadMap(map); }
+            
+            display.mapLoaded= function (){
+                display.startUpdates();
+                ss = new SpriteSheet("Sprites",32);
+                ss.onload = function(){
+                    console.log("Sprite");
+                    sprite = new Sprite(ss,0,0);
+                    display.addSprite(sprite);
+                    sprite.position.set([1,1]);
+                };
+                display.mapLoaded=function(){}
+            }
+            
+            /*display.setGridDimensions(10,10);
 
 
             ss1 = new SpriteSheet("dirt",48);
@@ -31,25 +47,38 @@
                 display.addSprite(sprite);
                 sprite.position.set([0,0]);
             };
+*/
 
             $("body").keydown(function(key){
                 pos = sprite.position.get() // [row, col]
                 switch(key.which){
                     case 38:
                     case 87://up
-                        sprite.move(NORTH);
+                        sprite.move(NORTH,map);
                     break;
                     case 40:
                     case 83://down
-                        sprite.move(SOUTH);
+                        sprite.move(SOUTH,map);
                     break;
                     case 37:
                     case 65://left
-                        sprite.move(WEST);
+                        sprite.move(WEST,map);
                     break;
                     case 39:
                     case 68://right
-                        sprite.move(EAST);
+                        sprite.move(EAST,map);
+                    break;
+                    case 49:            
+                        map = new Map("Level1"); 
+                        map.mapLoaded = function(map){ display.loadMap(map); }
+                    break;
+                    case 50:            
+                        map = new Map("Level2"); 
+                        map.mapLoaded = function(map){ display.loadMap(map); }
+                    break;
+                    case 51:            
+                        map = new Map("Level3"); 
+                        map.mapLoaded = function(map){ display.loadMap(map); }
                     break;
                 }
             });
