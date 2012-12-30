@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="10" height="10" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="town01" tilewidth="32" tileheight="32">
+  <image source="../../Downloads/town01.png" width="512" height="1440"/>
+ </tileset>
+ <layer name="WalkingArea" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYCANCOLBhOQHizpsQI3G/iUGgNQCAFrpBDQ=
+  </data>
+ </layer>
+ <layer name="Ladder" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFIFA/0A6AAgBFCACA
+  </data>
+ </layer>
+ <layer name="Collision" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJwzYWBgYAViNjyYHUqbMuAH4gTkB4s6NyBWQ8MMSGx1JBof6CbS3tVAvJIAXgVVCwAatQnf
+  </data>
+ </layer>
+</map>

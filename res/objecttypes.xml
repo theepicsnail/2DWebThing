@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="ChangeLevel" color="#0500a4"/>
+ <objecttype name="ChangeLayer" color="#15a400"/>
+</objecttypes>
