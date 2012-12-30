@@ -110,18 +110,19 @@ Display.prototype.update=function(_this){
         var sprites = this.spriteGrid[row][col];
         for(var i in tiles){
             var tile = tiles[i];
-            if(tile==0) continue;
-            var s = this.tilesetImages[0].getSprite(tile);
-            if(s[0] == undefined){
-                console.warn("Trying to draw uninitialized tile.",s)
-                continue;
+            if(tile!=0){
+                var s = this.tilesetImages[0].getSprite(tile);
+                if(s[0] == undefined){
+                    console.warn("Trying to draw uninitialized tile.",s)
+                    continue;
+                }
+                _this.ctx.drawImage(
+                            s[0],
+                            s[1],s[2],
+                            s[3],s[3],
+                            col*s[3],row*s[3],
+                            s[3],s[3])
             }
-            _this.ctx.drawImage(
-                        s[0],
-                        s[1],s[2],
-                        s[3],s[3],
-                        col*s[3],row*s[3],
-                        s[3],s[3])
             
             for(var s in sprites){
                 if(sprites[s].layer==i){

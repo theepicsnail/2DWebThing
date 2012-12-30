@@ -7,12 +7,12 @@
         <script src="js/Map.js"></script>
         <script src="js/SpriteSheet.js"></script>
         <script type="text/javascript">
-        var display, ss, sprite, map;
+        var display, ss, sprite, map, world;
         $(function(){
             display = new Display(320,320);
             $('#container').append(display.canvas);
 //            map = new Map("LayerTest");
-            map = new Map("level2"); 
+            map = new Map("Level1"); 
             map.mapLoaded = function(map){ display.loadMap(map); }
             
             display.mapLoaded= function (){
@@ -22,7 +22,8 @@
                     console.log("Sprite");
                     sprite = new Sprite(ss,0,0);
                     display.addSprite(sprite);
-                    sprite.position.set([1,1]);
+                    sprite.position.set([5,5]);
+                    world = 1;
                 };
                 display.mapLoaded=function(){}
             }
@@ -48,7 +49,6 @@
                 sprite.position.set([0,0]);
             };
 */
-
             $("body").keydown(function(key){
                 pos = sprite.position.get() // [row, col]
                 switch(key.which){
@@ -62,11 +62,37 @@
                     break;
                     case 37:
                     case 65://left
-                        sprite.move(WEST,map);
+                        if(sprite.move(WEST,map))
+                        {
+                            console.log("Changing worlds, WEST");
+                            world --;
+                            map = new Map("Level"+world);
+                            map.mapLoaded = function(map){
+                                display.loadMap(map);
+                                display.mapLoaded = function(){
+                                    var pos = sprite.position.get();
+                                    pos[1]=map.layers[0].data[0].length-1
+                                    sprite.position.set(pos);
+                                }
+                            }
+                        } 
                     break;
                     case 39:
                     case 68://right
-                        sprite.move(EAST,map);
+                        if(sprite.move(EAST,map)){
+                            console.log("Changing worlds, EAST");
+                            world ++;
+                            map = new Map("Level"+world);
+                            map.mapLoaded = function(map){
+                                display.loadMap(map);
+                                display.mapLoaded = function(){
+                                    var pos = sprite.position.get();
+                                    pos[1]=0
+                                    sprite.position.set(pos);
+                                }
+                            }
+
+                        }
                     break;
                     case 49:            
                         map = new Map("Level1"); 

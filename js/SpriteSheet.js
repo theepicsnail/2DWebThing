@@ -34,7 +34,7 @@ function Sprite(spriteSheet, row, col){
     this.sy  = col * spriteSheet.size
     this.img = spriteSheet.image;
     this.position = new ChangeableValue([0,0])
-    this.layer = 0;
+    this.layer = 1;
     this.direction=SOUTH
 }
 Sprite.prototype.isDirty = function(){
@@ -56,10 +56,14 @@ Sprite.prototype.move = function(direction,world){
         case EAST:  pos[1]+=1; break;
         case WEST:  pos[1]-=1; break;
     }
+    if(!ValidIndex(world.layers[0].data,pos))
+        return true
+
     if(!world.collisionAt(pos))
         this.position.set(pos);
     else
         this.position.set(this.position.get())
+    return false;
 }
 
 function timestamp(){ return (new Date()).getTime()/1000.0; }
