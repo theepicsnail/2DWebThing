@@ -3,17 +3,20 @@
  <tileset firstgid="1" name="town01" tilewidth="32" tileheight="32">
   <image source="../../Downloads/town01.png" width="512" height="1440"/>
  </tileset>
- <layer name="WalkingArea" width="10" height="10">
+ <layer name="WalkingArea" width="10" height="10" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYCANCOLBhOQHizpsQI3G/iUGgNQCAFrpBDQ=
   </data>
  </layer>
- <layer name="Ladder" width="10" height="10">
+ <layer name="Ladder" width="10" height="10" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYBgFIFA/0A6AAgBFCACA
   </data>
  </layer>
  <layer name="Collision" width="10" height="10">
+  <properties>
+   <property name="collision" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJwzYWBgYAViNjyYHUqbMuAH4gTkB4s6NyBWQ8MMSGx1JBof6CbS3tVAvJIAXgVVCwAatQnf
   </data>
