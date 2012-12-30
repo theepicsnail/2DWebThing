@@ -51,7 +51,7 @@ function ValidIndex(array, index){
 
 SOUTH=0
 WEST =1
-NORTH=2
-EAST =3
+EAST =2
+NORTH=3
 
 
