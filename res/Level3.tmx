@@ -3,12 +3,12 @@
  <tileset firstgid="1" name="town01" tilewidth="32" tileheight="32">
   <image source="../../Downloads/town01.png" width="512" height="1440"/>
  </tileset>
- <layer name="WalkingArea" width="10" height="10" visible="0">
+ <layer name="WalkingArea" width="10" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYCANCOLBhOQHizpsQI3G/iUGgNQCAFrpBDQ=
+   eJwTZCANCOLBhOQHizpsQI3G/iUGgNQCAHV5BEU=
   </data>
  </layer>
- <layer name="Ladder" width="10" height="10" visible="0">
+ <layer name="Ladder" width="10" height="10">
   <data encoding="base64" compression="zlib">
    eJxjYBgFIFA/0A6AAgBFCACA
   </data>
