@@ -8,12 +8,13 @@ function Display(width, height){
     this.renderThread = 0;
     this.sprites = [];
     this.dirty = [];
-    for(var x = 0; x < width; x += 48)
+    
+    for(var x = 0; x < width; x += 32)
     {
         this.ctx.moveTo(x,0);
         this.ctx.lineTo(x,height);
     }
-    for(var y = 0; y < height; y += 48)
+    for(var y = 0; y < height; y += 32)
     {
         this.ctx.moveTo(0,y);
         this.ctx.lineTo(width,y);
@@ -22,14 +23,38 @@ function Display(width, height){
     this.ctx.stroke();
 }
 
-Display.prototype.setGridDimensions = function(rows, cols){
-    this.grid = CreateArray([rows,cols,0])
-    this.startUpdates(this.fps);
+Display.prototype.loadMap = function(map){
+    var tilesets = map.tilesets;
+    this.tilesetImages = [];
+    this.map = map;
+    this.tilesToLoad = tilesets.length
+    var _this = this;
+    this.spriteGrid = CreateArray([map.height,map.width,0])
+    for(var t in tilesets){
+        var ss = new SpriteSheet(tilesets[t]['name'],tilesets[t]['tilewidth']);
+        ss.onload = function(){
+            console.log("Tilesheet loaded.",_this.tilesToLoad);
+            _this.tilesToLoad -= 1;
+            if(_this.tilesToLoad == 0){
+                _this.mapLoaded();
+                for(var row = map.height - 1 ; row >=0 ; --row)
+                for(var col = map.width - 1 ; col >=0 ; --col){
+                    _this.dirty.push([row,col])
+                }
+            }
+        }
+        this.tilesetImages.push(ss);
+    }
+
+}
+
+Display.prototype.mapLoaded = function(){
+    console.log("Display finished loading tilesheets.")
 }
 
 Display.prototype.stopUpdates = function(){
     if(this.renderThread)
-        stopInterval(this.renderThread)
+        clearInterval(this.renderThread)
     this.renderThread = 0
     this.lastTimestamp = 0
 }
@@ -45,50 +70,33 @@ Display.prototype.startUpdates = function(fps){
 
 Display.prototype.addSprite = function(sprite){   
     console.log("Added", sprite, sprite.position.get());
+    console.trace()
     var _this = this;
     var pos = sprite.position.get();
     this.dirty.push(pos);
-    this.grid[pos[0]][pos[1]].push(sprite)
+    this.spriteGrid[pos[0]][pos[1]].push(sprite)
     sprite.position.addChangeListener(
         function(o,n){
-            if(ValidIndex(_this.grid,o)){
+            if(ValidIndex(_this.spriteGrid,o)){
                 _this.dirty[_this.dirty.length]=o;
-                var idx = _this.grid[o[0]][o[1]].indexOf(sprite)
+                var idx = _this.spriteGrid[o[0]][o[1]].indexOf(sprite)
                 if(idx!=-1){
-                    _this.grid[o[0]][o[1]].splice(idx,1);
+                    _this.spriteGrid[o[0]][o[1]].splice(idx,1);
                 }
             }else{
                 console.warn("Invalid old location for sprite move.",n,o)
             }
             
-            if(ValidIndex(_this.grid,n)){
+            if(ValidIndex(_this.spriteGrid,n)){
                 _this.dirty[_this.dirty.length]=n;
-                _this.grid[n[0]][n[1]].push(sprite);
+                _this.spriteGrid[n[0]][n[1]].push(sprite);
             }else{
                 console.warn("Invalid new location for sprite move.",n,o)
             }
         }
     );
 }
-Display.prototype.removeSprite = function(sprite){
-    sprite.position.removeChangeListener(this);
-//    var idx = this.sprites.indexOf(sprite);
-//    if(idx != -1)
-//        this.sprites.splice(idx,1);
-}
 
-
-
-//in the sprites setPosition function you would need to pass the display so that you could draw it.
-
-
-//Display.prototype.drawSprite = function (sprite){
-//    this.ctx.putImageData(sprite.data, sprite.x*48, sprite.y*48);
-//}
-
-//Display.prototype.addSprite = function(sprite){
-//    this.sprites.push(sprite);
-//}
 
 Display.prototype.update=function(_this){
     if(_this.dirty.length==0) return;
@@ -98,13 +106,14 @@ Display.prototype.update=function(_this){
         var pos = _this.dirty[idx];
         var row = pos[0];
         var col = pos[1];
-        if(row<0 || col <0 || row >9 || col>9) continue;
-        var sprites = _this.grid[row][col];
-        for(var i in sprites){
-            var s = sprites[i].getImage();
+        var tiles = this.map.tilesAt(pos)//_this.grid[row][col];
+        var sprites = this.spriteGrid[row][col];
+        for(var i in tiles){
+            var tile = tiles[i];
+            if(tile==0) continue;
+            var s = this.tilesetImages[0].getSprite(tile);
             if(s[0] == undefined){
-                console.warn("Trying to draw uninitialized sprite.",s)
-//                nextDirty.push(pos);
+                console.warn("Trying to draw uninitialized tile.",s)
                 continue;
             }
             _this.ctx.drawImage(
@@ -113,6 +122,21 @@ Display.prototype.update=function(_this){
                         s[3],s[3],
                         col*s[3],row*s[3],
                         s[3],s[3])
+            
+            for(var s in sprites){
+                if(sprites[s].layer==i){
+                    //draw the sprite
+                    var img = sprites[s].getImage();
+                    _this.ctx.drawImage(
+                        img[0],
+                        img[1],img[2],
+                        img[3],img[3],
+                        col*img[3],row*img[3],
+                        img[3],img[3])
+            
+                }
+            }
+            
         }
     }
     _this.dirty = nextDirty
