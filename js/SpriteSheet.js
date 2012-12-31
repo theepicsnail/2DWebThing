@@ -65,7 +65,16 @@ Sprite.prototype.move = function(direction,world){
         this.position.set(this.position.get())
     return false;
 }
-
+Sprite.prototype.attack = function(world){
+    var pos = this.position.get().concat()
+    switch(this.direction){
+        case SOUTH: pos[0]+=1; break;
+        case NORTH: pos[0]-=1; break;
+        case EAST:  pos[1]+=1; break;
+        case WEST:  pos[1]-=1; break;
+    }
+    return world.breakTile(pos)
+}
 function timestamp(){ return (new Date()).getTime()/1000.0; }
 
 function AnimatedSprite(spriteSheet, frameList){

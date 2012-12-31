@@ -115,8 +115,9 @@ Display.prototype.update=function(_this){
     var maxVisCol = minVisCol + this.screen[1]
     var nextDirty = []
     console.log(minVisRow,minVisCol,maxVisRow,maxVisCol);
-    for(var idx in _this.dirty){
-        var pos = _this.dirty[idx];
+    var dirty = _this.dirty.concat(_this.map.dirty);
+    for(var idx in dirty){
+        var pos = dirty[idx];
         var row = pos[0];
         var col = pos[1];
         if(row < minVisRow || col < minVisCol || row > maxVisRow || col > maxVisCol)
@@ -158,6 +159,7 @@ Display.prototype.update=function(_this){
         }
     }
     _this.dirty = nextDirty
+    _this.map.dirty = [];
 }
 
 Display.prototype.setFocus = function (pos) {

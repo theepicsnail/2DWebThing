@@ -1,7 +1,8 @@
 function Map(path){
     try{
         var _this = this;
-        $.getJSON("res/"+path+".json",function(json){_this.loadMap(json)});
+        this.dirty = [];
+        $.getJSON("world/"+path+".json",function(json){_this.loadMap(json)});
     }catch(err){
     }
 }
@@ -45,6 +46,20 @@ Map.prototype.tilesAt = function(pos){
     return sprites
 }
 
+Map.prototype.breakTile = function (pos) {
+    var key;
+    var tileBroken = false;
+    for(key in this.layers){
+        if(!this.layers[key].breakable) continue;
+        
+        this.layers[key].data[pos[0]][pos[1]] = 0;
+        tileBroken = true;
+    }
+    if(tileBroken)
+        this.dirty.push(pos)
+    return tileBroken;
+}
+
 function TileSet(tsData){
     this.firstgid = 0;
     this.image = "";
@@ -63,6 +78,6 @@ function Layer(layerData){
     }
     
     var props = layerData["properties"]||{}
-    this.collides = props["collision"] != undefined
-    this.spriteLayer = props["sprite"] != undefined
+    this.collides = props["collision"] != undefined || props["collides"] != undefined
+    this.breakable = props["breaks"] != undefined || props["breakable"] != undefined
 }

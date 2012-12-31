@@ -12,7 +12,7 @@
             display = new Display(224,224);
             $('#container').append(display.canvas);
 //            map = new Map("LayerTest");
-            map = new Map("Level1"); 
+            map = new Map("0.0"); 
             map.mapLoaded = function(map){ display.loadMap(map); }
             
             display.mapLoaded= function (){
@@ -97,6 +97,9 @@
                             }
 
                         }
+                    break;
+                    case 32: // attack
+                        sprite.attack(map)
                     break;
                     case 49:            
                         map = new Map("Level1"); 

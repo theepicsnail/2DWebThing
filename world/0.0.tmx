@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="terrain" tilewidth="32" tileheight="32">
+  <image source="../res/terrain.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Ground" width="32" height="32" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qXXYyi4aqqqqurrBxngBAE=
+  </data>
+ </layer>
+ <layer name="Breakable" width="32" height="32">
+  <properties>
+   <property name="breakable" value="true"/>
+   <property name="collides" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztklsKACAIBMX7H7pfCSyVfEC7MF9RsywxEXEzMr/7bz0qumpvS+8pmX7LfvDX+q3nHr+WCn902yl+z53XXTv8u6vDn/0PpvurNwcAAABAnAUUcAdR
+  </data>
+ </layer>
+ <layer name="Bedrock" width="32" height="32" visible="0">
+  <properties>
+   <property name="collides" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzTENAAAMw7BiKH+wY7E+jpTbTdLxq/h8Pp/P5/P5fD6fz//0lx/lewi5
+  </data>
+ </layer>
+</map>
