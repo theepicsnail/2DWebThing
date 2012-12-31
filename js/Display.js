@@ -8,7 +8,8 @@ function Display(width, height){
     this.renderThread = 0;
     this.sprites = [];
     this.dirty = [];
-    
+    this.screen = [0,0];
+    this.focus = [2,2]; // cell to ensure is visible or centered if possible
     for(var x = 0; x < width; x += 32)
     {
         this.ctx.moveTo(x,0);
@@ -30,6 +31,13 @@ Display.prototype.loadMap = function(map){
     this.tilesToLoad = tilesets.length
     var _this = this;
     this.spriteGrid = CreateArray([map.height,map.width,0])
+    this.screen[0] = this.canvas.height / map.tileSize;
+    this.screen[1] = this.canvas.width / map.tileSize;
+    if((this.canvas.width / map.tileSize % 2 != 1)
+    || (this.canvas.height% map.tileSize % 2 != 1)){
+        console.warn("Display does not properly fit tilesize")
+    }
+    
     for(var t in tilesets){
         var ss = new SpriteSheet(tilesets[t]['name'],tilesets[t]['tilewidth']);
         ss.onload = function(){
@@ -101,13 +109,22 @@ Display.prototype.addSprite = function(sprite){
 Display.prototype.update=function(_this){
     if(_this.dirty.length==0) return;
     console.log("update.");
+    var minVisRow = this.focus[0] - (this.screen[0]-1)/2; 
+    var minVisCol = this.focus[1] - (this.screen[1]-1)/2; 
+    var maxVisRow = minVisRow + this.screen[0]
+    var maxVisCol = minVisCol + this.screen[1]
     var nextDirty = []
+    console.log(minVisRow,minVisCol,maxVisRow,maxVisCol);
     for(var idx in _this.dirty){
         var pos = _this.dirty[idx];
         var row = pos[0];
         var col = pos[1];
+        if(row < minVisRow || col < minVisCol || row > maxVisRow || col > maxVisCol)
+            continue;
         var tiles = this.map.tilesAt(pos)//_this.grid[row][col];
         var sprites = this.spriteGrid[row][col];
+        row -= minVisRow;
+        col -= minVisCol;
         for(var i in tiles){
             var tile = tiles[i];
             if(tile!=0){
@@ -143,32 +160,33 @@ Display.prototype.update=function(_this){
     _this.dirty = nextDirty
 }
 
-
-/*
-    if(!this.scene)
-    {
-        this.stopUpdates();
-        return;
+Display.prototype.setFocus = function (pos) {
+    /*
+    XXXXXXXXX
+    XXSSSSSXX
+    XXSSSSSXX
+    XXSSFSSXX   <- F = focus [3,4]
+    XXSSSSSXX   <- S = screen [5,5]
+    XXSSSSSXX   <- X = unrendered cell
+    XXXXXXXXX
+    XXXXXXXXX
+    XXXXXXXXX
+    */
+    
+    //this.screen = [rows, cols];
+    //this.focus = [row, col]
+    
+    //inclusive min and maxes for pos dimensions
+    var minFocusRow = (this.screen[0]-1)/2;
+    var minFocusCol = (this.screen[1]-1)/2;
+    var maxFocusRow = this.map.height-(this.screen[0]-1)/2-1;
+    var maxFocusCol = this.map.width- (this.screen[1]-1)/2-1;
+    this.focus[0] = Math.max(minFocusRow,Math.min(maxFocusRow,pos[0]))
+    this.focus[1] = Math.max(minFocusCol,Math.min(maxFocusCol,pos[1])) 
+    var row = this.focus[0] - (this.screen[0]-1)/2; 
+    var col = this.focus[1] - (this.screen[1]-1)/2; 
+    for(var dr = 0 ; dr < this.screen[0] ; dr ++)
+    for(var dc = 0 ; dc < this.screen[1] ; dc ++){
+        this.dirty.push([row + dr, col + dc]);
     }
-    var now = new Date()
-    if(this.lastTimestamp == 0){
-        this.lastTimestamp = now;
-        return;
-    }
-    var dt = this.lastTimestamp - now;
-    this.scene.step(dt);
-    if(this.scene.isDirty()){
-//        this.scene.
-    }
-
-
-//    var sprites;
-//    for(var idx in this.sprites){
-//        sprite = this.sprites[idx];
-//        if(sprite.isDirty()){
-//            this.drawSprite(sprite)
-//            sprite.clean();
-//        }
-//    }
 }
-*/

@@ -9,7 +9,7 @@
         <script type="text/javascript">
         var display, ss, sprite, map, world;
         $(function(){
-            display = new Display(320,320);
+            display = new Display(224,224);
             $('#container').append(display.canvas);
 //            map = new Map("LayerTest");
             map = new Map("Level1"); 
@@ -23,6 +23,7 @@
                     sprite = new Sprite(ss,0,0);
                     display.addSprite(sprite);
                     sprite.position.set([5,5]);
+                    display.setFocus(sprite.position.get())
                     world = 1;
                 };
                 display.mapLoaded=function(){}
@@ -50,6 +51,7 @@
             };
 */
             $("body").keydown(function(key){
+                
                 pos = sprite.position.get() // [row, col]
                 switch(key.which){
                     case 38:
@@ -73,6 +75,7 @@
                                     var pos = sprite.position.get();
                                     pos[1]=map.layers[0].data[0].length-1
                                     sprite.position.set(pos);
+                                    display.setFocus(sprite.position.get())
                                 }
                             }
                         } 
@@ -89,6 +92,7 @@
                                     var pos = sprite.position.get();
                                     pos[1]=0
                                     sprite.position.set(pos);
+                                    display.setFocus(sprite.position.get())
                                 }
                             }
 
@@ -107,6 +111,7 @@
                         map.mapLoaded = function(map){ display.loadMap(map); }
                     break;
                 }
+                display.setFocus(sprite.position.get())
             });
         });
         </script>
