@@ -22,9 +22,6 @@ ChangeableValue.prototype.removeChangeListener = function(callback){
     this.listeners.splice(idx,1);
 }
 
-
-
-
 function CreateArray(dimensions,fillValue){
     var out = []
     var count = dimensions.shift()

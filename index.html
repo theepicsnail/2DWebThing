@@ -6,10 +6,12 @@
         <script src="js/Display.js"></script>
         <script src="js/Map.js"></script>
         <script src="js/SpriteSheet.js"></script>
+        <script src="js/Sprite.js"></script>
         <script type="text/javascript">
         var display, ss, sprite, map, world;
         $(function(){
-            display = new Display(224,224);
+            var cells = 11;
+            display = new Display(cells*32,cells*32);
             $('#container').append(display.canvas);
 //            map = new Map("LayerTest");
             map = new Map("0.0"); 
@@ -28,30 +30,9 @@
                 };
                 display.mapLoaded=function(){}
             }
-            
-            /*display.setGridDimensions(10,10);
 
 
-            ss1 = new SpriteSheet("dirt",48);
-            ss1.onload = function(){
-                console.log("dirt.");
-                for(var r = 0 ; r < 10 ; r ++)
-                for(var c = 0 ; c < 10 ; c ++){
-                    var sprite1 = new Sprite(ss1,0,0);
-                    sprite1.position.set([r,c]);
-                    display.addSprite(sprite1);
-                }
-            };
-
-            ss = new SpriteSheet("betty",48);
-            ss.onload = function(){
-                sprite = new Sprite(ss,0,0);
-                display.addSprite(sprite);
-                sprite.position.set([0,0]);
-            };
-*/
-            $("body").keydown(function(key){
-                
+            $("body").keydown(function(key){                
                 pos = sprite.position.get() // [row, col]
                 switch(key.which){
                     case 38:
@@ -124,6 +105,7 @@
     <body>
         <div id="container">
         </div>
+        Use WASD or Arrow keys to move. Space to dig.
     </body>
 </html>
 
